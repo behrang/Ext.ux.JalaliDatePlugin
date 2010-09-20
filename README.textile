@@ -8,22 +8,19 @@ h2. Installation
 
 p. To install Ext.ux.JalaliDatePlugin, include the following on your page:
 
-bc..
-    <script src="Jalali.js"></script>
+bc..     <script src="Jalali.js"></script>
     <script src="JalaliDate.js"></script>
     <script src="JalaliDatePlugin.js"></script>
 
 p. If you want a Persian localization, include this one too:
 
-bc..
-    <script src="JalaliDatePlugin-fa_IR.js"></script>
+bc..     <script src="JalaliDatePlugin-fa_IR.js"></script>
 
 h2. Usage
 
 p. Usage is very easy. Just add Ext.ux.JalaliDatePlugin to DatePicker, DateMenu or DateField's plugins property:
 
-bc..
-var datePicker = new Ext.DatePicker({
+bc.. var datePicker = new Ext.DatePicker({
     plugins: [Ext.ux.JalaliDatePlugin]
 });
 
