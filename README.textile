@@ -1,0 +1,40 @@
+h1. Ext.ux.JalaliDatePlugin
+
+h2. About
+
+p. JalaliDatePlugin is an ExtJS plugin for DatePicker, DateMenu and DateField components. It converts their calendar to Jalali (Khorshidi or Shamsi) calendar.
+
+h2. Installation
+
+p. To install Ext.ux.JalaliDatePlugin, include the following on your page:
+
+bc..
+    <script src="Jalali.js"></script>
+    <script src="JalaliDate.js"></script>
+    <script src="JalaliDatePlugin.js"></script>
+
+p. If you want a Persian localization, include this one too:
+
+bc..
+    <script src="JalaliDatePlugin-fa_IR.js"></script>
+
+h2. Usage
+
+p. Usage is very easy. Just add Ext.ux.JalaliDatePlugin to DatePicker, DateMenu or DateField's plugins property:
+
+bc..
+var datePicker = new Ext.DatePicker({
+    plugins: [Ext.ux.JalaliDatePlugin]
+});
+
+p. Please note that all other configuration properties of components like minDate, maxDate, disabledDays and disabledDates work as expected.
+
+h2. Example
+
+p. Download or clone the code and then open example.html file in your browser.
+
+h2. License
+
+p. Jalali.js is licensed under the terms of the LGPL license.
+
+p. JalaliDate.js and JalaliDatePlugin.js and other dependant files are licensed under the terms of the MIT license.
