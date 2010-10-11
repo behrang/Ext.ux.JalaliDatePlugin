@@ -71,6 +71,7 @@ Ext.override(Ext.DatePicker, {
 
 Ext.override(Ext.form.DateField, {
     format: 'B/Q/R',
+    altFormats: 'B/Q/R|B/q/r|b/q/r|b/Q/R|q/r|Q/R|Q/r|q/R|r|R',
     todayText: 'امروز',
     okText: 'ادامه',
     cancelText: 'برگشت',

@@ -52,6 +52,9 @@ Ext.apply(Date, {
      * @return {Boolean} True if valid, false otherwise.
      */
     isJalaliValid: function (y, m, d) {
+        if (y > 1500 || y < 1 || m > 12 || m < 1 || d > 31 || d < 1) {
+            return false;
+        }
         var g = Date.jalaliConverter.jalaliToGregorian([y, m, d]);
         var j = Date.jalaliConverter.gregorianToJalali(g);
         return j[0] === y && j[1] === m && j[2] === d;
@@ -109,7 +112,7 @@ Ext.apply(Date, {
         var jy = parseInt(split[0], 10),
             jm = parseInt(split[1], 10),
             jd = parseInt(split[2], 10);
-        if (isNaN(jy) || isNaN(jm) || isNaN(jd)) {
+        if (isNaN(jy) || isNaN(jm) || isNaN(jd) || jy > 1500 || jy < 1 || jm > 12 || jm < 1 || jd > 31 || jd < 1) {
             return null;
         }
         var g = Date.jalaliConverter.jalaliToGregorian([jy, jm, jd]);
@@ -194,11 +197,67 @@ Ext.apply(Date.parseFunctions, {
     'Jalali': Date.parseJalali,
     'B/Q/R': Date.parseJalali,
     'B/q/r': Date.parseJalali,
-    'b/q/r': function (jalaliString, strict) {
-        return Date.parseJalali('13' + jalaliString, strict);
+    'b/q/r': function (value, strict) {
+        return Date.parseJalali('13' + value, strict);
     },
-    'b/Q/R': function (jalaliString, strict) {
-        return Date.parseJalali('13' + jalaliString, strict);
+    'b/Q/R': function (value, strict) {
+        return Date.parseJalali('13' + value, strict);
+    },
+    'B': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(value + '/' + (now.getJalaliMonth() + 1) + '/' + now.getJalaliDate(), strict);
+    },
+    'b': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali('13' + value + '/' + (now.getJalaliMonth() + 1) + '/' + now.getJalaliDate(), strict);
+    },
+    'q': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(now.getJalaliFullYear() + '/' + value + '/' + now.getJalaliDate(), strict);
+    },
+    'Q': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(now.getJalaliFullYear() + '/' + value + '/' + now.getJalaliDate(), strict);
+    },
+    'r': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(now.getJalaliFullYear() + '/' + (now.getJalaliMonth() + 1) + '/' + value, strict);
+    },
+    'R': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(now.getJalaliFullYear() + '/' + (now.getJalaliMonth() + 1) + '/' + value, strict);
+    },
+    'b/q': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali('13' + value + '/' + now.getJalaliDate(), strict);
+    },
+    'B/q': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(value + '/' + now.getJalaliDate(), strict);
+    },
+    'B/Q': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(value + '/' + now.getJalaliDate(), strict);
+    },
+    'b/Q': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali('13' + value + '/' + now.getJalaliDate(), strict);
+    },
+    'q/r': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(now.getJalaliFullYear() + '/' + value, strict);
+    },
+    'Q/r': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(now.getJalaliFullYear() + '/' + value, strict);
+    },
+    'Q/R': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(now.getJalaliFullYear() + '/' + value, strict);
+    },
+    'q/R': function (value, strict) {
+        var now = new Date();
+        return Date.parseJalali(now.getJalaliFullYear() + '/' + value, strict);
     }
 });
 
