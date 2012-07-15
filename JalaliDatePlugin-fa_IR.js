@@ -80,5 +80,6 @@ Ext.override(Ext.form.DateField, {
     maxText: 'باید تاریخ‌های پیش از {0} را برگزینید',
     invalidText: '{0} تاریخ درستی نیست، باید در قالب «سال/ماه/روز» باشد',
     disabledDaysText: 'غیرفعال',
-    disabledDatesText: 'غیرفعال'
+    disabledDatesText: 'غیرفعال',
+    startDay: 6
 });
