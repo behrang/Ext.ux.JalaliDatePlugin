@@ -97,7 +97,7 @@ Ext.apply(Date, {
      */
     createJalali: function (year, month, date) {
         var g = Date.jalaliConverter.jalaliToGregorian([year, month + 1, date]);
-        return new Date(g[0], g[1] - 1, g[2]);
+        return new Date(g[0], g[1] - 1, g[2], 12);
     },
 
     /**
@@ -116,7 +116,7 @@ Ext.apply(Date, {
             return null;
         }
         var g = Date.jalaliConverter.jalaliToGregorian([jy, jm, jd]);
-        var d = new Date(g[0], g[1] - 1, g[2]);
+        var d = new Date(g[0], g[1] - 1, g[2], 12);
         if (strict &&
                 (!d || d.getJalaliFullYear() !== jy || d.getJalaliMonth() + 1 !== jm && d.getJalaliDate() !== jd)) {
             return null;
