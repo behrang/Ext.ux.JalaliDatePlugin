@@ -23,153 +23,162 @@
  */
 
 /* Changes:
+ * 2013-May-25:
+ *   Move JalaliConverter to Ext.Date.
+ *
  * 2010-Sep-19:
- *      Some minor changes to names of functions for better naming conventions.
- *      Also redundant functions removed to prevent namespace pollution.
+ *   Some minor changes to names of functions for better naming conventions.
+ *   Also redundant functions removed to prevent namespace pollution.
  *
  * 2008-Jul-32:
- *	Use a remainder() function to fix conversion of ancient dates
- *	(before 1600 gregorian).  Reported by Shamim Rezaei.
+ *   Use a remainder() function to fix conversion of ancient dates
+ *   (before 1600 gregorian).  Reported by Shamim Rezaei.
  *
  * 2003-Mar-29:
- *      Ported to javascript by Behdad Esfahbod
+ *   Ported to javascript by Behdad Esfahbod
  *
  * 2001-Sep-21:
- *	Fixed a bug with "30 Esfand" dates, reported by Mahmoud Ghandi
+ *   Fixed a bug with "30 Esfand" dates, reported by Mahmoud Ghandi
  *
  * 2001-Sep-20:
- *	First LGPL release, with both sides of conversions
+ *   First LGPL release, with both sides of conversions
  */
 
-Date.jalaliConverter = {};
+(function () {
+    'use strict';
 
-Date.jalaliConverter.gregorianDaysInMonth = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-Date.jalaliConverter.jalaliDaysInMonth = new Array(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29);
+    Ext.Date.JalaliConverter = {};
 
-Date.jalaliConverter.div = function (a, b) {
-    return Math.floor(a / b);
-};
+    Ext.Date.JalaliConverter.gregorianDaysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    Ext.Date.JalaliConverter.jalaliDaysInMonth = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
 
-Date.jalaliConverter.remainder = function (a, b) {
-    return a - Math.floor(a / b) * b;
-};
+    Ext.Date.JalaliConverter.div = function (a, b) {
+        return Math.floor(a / b);
+    };
 
-/**
- * Converts a Gregorian date to Jalali.
- * @param {Array} g An array containing Gregorian year, month and date.
- * @return {Array} An array containing Jalali year, month and date.
- */
-Date.jalaliConverter.gregorianToJalali = function (g) {
-    var gy, gm, gd;
-    var jy, jm, jd;
-    var g_day_no, j_day_no;
-    var j_np;
+    Ext.Date.JalaliConverter.remainder = function (a, b) {
+        return a - Math.floor(a / b) * b;
+    };
 
-    var i;
+    /**
+     * Converts a Gregorian date to Jalali.
+     * @param {Array} g An array containing Gregorian year, month and date.
+     * @return {Array} An array containing Jalali year, month and date.
+     */
+    Ext.Date.JalaliConverter.gregorianToJalali = function (g) {
+        var gy, gm, gd,
+            jy, jm, jd,
+            g_day_no, j_day_no,
+            j_np, i, div, remainder,
+            g_days_in_month, j_days_in_month;
 
-    gy = g[0] - 1600;
-    gm = g[1] - 1;
-    gd = g[2] - 1;
+        gy = g[0] - 1600;
+        gm = g[1] - 1;
+        gd = g[2] - 1;
 
-    var div = Date.jalaliConverter.div;
-    var remainder = Date.jalaliConverter.remainder;
-    var g_days_in_month = Date.jalaliConverter.gregorianDaysInMonth;
-    var j_days_in_month = Date.jalaliConverter.jalaliDaysInMonth;
+        div = Ext.Date.JalaliConverter.div;
+        remainder = Ext.Date.JalaliConverter.remainder;
+        g_days_in_month = Ext.Date.JalaliConverter.gregorianDaysInMonth;
+        j_days_in_month = Ext.Date.JalaliConverter.jalaliDaysInMonth;
 
-    g_day_no = 365 * gy + div((gy + 3), 4) - div((gy + 99), 100) + div((gy + 399), 400);
-    for (i = 0; i < gm; ++i)
-        g_day_no += g_days_in_month[i];
-    if (gm > 1 && ((gy % 4 == 0 && gy % 100 != 0) || (gy % 400 == 0)))
-    /* leap and after Feb */
-        ++g_day_no;
-    g_day_no += gd;
+        g_day_no = 365 * gy + div((gy + 3), 4) - div((gy + 99), 100) + div((gy + 399), 400);
+        for (i = 0; i < gm; i += 1) {
+            g_day_no += g_days_in_month[i];
+        }
+        if (gm > 1 && ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0))) {
+            /* leap and after Feb */
+            g_day_no += 1;
+        }
+        g_day_no += gd;
 
-    j_day_no = g_day_no - 79;
+        j_day_no = g_day_no - 79;
 
-    j_np = div(j_day_no, 12053);
-    j_day_no = remainder(j_day_no, 12053);
+        j_np = div(j_day_no, 12053);
+        j_day_no = remainder(j_day_no, 12053);
 
-    jy = 979 + 33 * j_np + 4 * div(j_day_no, 1461);
-    j_day_no = remainder(j_day_no, 1461);
+        jy = 979 + 33 * j_np + 4 * div(j_day_no, 1461);
+        j_day_no = remainder(j_day_no, 1461);
 
-    if (j_day_no >= 366) {
-        jy += div((j_day_no - 1), 365);
-        j_day_no = remainder((j_day_no - 1), 365);
-    }
+        if (j_day_no >= 366) {
+            jy += div((j_day_no - 1), 365);
+            j_day_no = remainder((j_day_no - 1), 365);
+        }
 
-    for (i = 0; i < 11 && j_day_no >= j_days_in_month[i]; ++i) {
-        j_day_no -= j_days_in_month[i];
-    }
-    jm = i + 1;
-    jd = j_day_no + 1;
+        for (i = 0; i < 11 && j_day_no >= j_days_in_month[i]; i += 1) {
+            j_day_no -= j_days_in_month[i];
+        }
+        jm = i + 1;
+        jd = j_day_no + 1;
 
-    return new Array(jy, jm, jd);
-};
+        return [jy, jm, jd];
+    };
 
-/**
- * Converts a Jalali date to Gregorian.
- * @param {Array} j An array containing Jalali year, month and date.
- * @return {Array} An array containing Gregorian year, month and date.
- */
-Date.jalaliConverter.jalaliToGregorian = function (j) {
-    var gy, gm, gd;
-    var jy, jm, jd;
-    var g_day_no, j_day_no;
-    var leap;
+    /**
+     * Converts a Jalali date to Gregorian.
+     * @param {Array} j An array containing Jalali year, month and date.
+     * @return {Array} An array containing Gregorian year, month and date.
+     */
+    Ext.Date.JalaliConverter.jalaliToGregorian = function (j) {
+        var gy, gm, gd,
+            jy, jm, jd,
+            g_day_no, j_day_no,
+            leap, i, div, remainder,
+            g_days_in_month, j_days_in_month;
 
-    var i;
+        jy = j[0] - 979;
+        jm = j[1] - 1;
+        jd = j[2] - 1;
 
-    jy = j[0] - 979;
-    jm = j[1] - 1;
-    jd = j[2] - 1;
+        div = Ext.Date.JalaliConverter.div;
+        remainder = Ext.Date.JalaliConverter.remainder;
+        g_days_in_month = Ext.Date.JalaliConverter.gregorianDaysInMonth;
+        j_days_in_month = Ext.Date.JalaliConverter.jalaliDaysInMonth;
 
-    var div = Date.jalaliConverter.div;
-    var remainder = Date.jalaliConverter.remainder;
-    var g_days_in_month = Date.jalaliConverter.gregorianDaysInMonth;
-    var j_days_in_month = Date.jalaliConverter.jalaliDaysInMonth;
+        j_day_no = 365 * jy + div(jy, 33) * 8 + div((remainder(jy, 33) + 3), 4);
+        for (i = 0; i < jm; i += 1) {
+            j_day_no += j_days_in_month[i];
+        }
 
-    j_day_no = 365 * jy + div(jy, 33) * 8 + div((remainder(jy, 33) + 3), 4);
-    for (i = 0; i < jm; ++i)
-        j_day_no += j_days_in_month[i];
+        j_day_no += jd;
 
-    j_day_no += jd;
+        g_day_no = j_day_no + 79;
 
-    g_day_no = j_day_no + 79;
+        gy = 1600 + 400 * div(g_day_no, 146097);
+        /* 146097 = 365*400 + 400/4 - 400/100 + 400/400 */
+        g_day_no = remainder(g_day_no, 146097);
 
-    gy = 1600 + 400 * div(g_day_no, 146097);
-    /* 146097 = 365*400 + 400/4 - 400/100 + 400/400 */
-    g_day_no = remainder(g_day_no, 146097);
+        leap = 1;
+        if (g_day_no >= 36525) { /* 36525 = 365*100 + 100/4 */
+            g_day_no -= 1;
+            gy += 100 * div(g_day_no, 36524);
+            /* 36524 = 365*100 + 100/4 - 100/100 */
+            g_day_no = remainder(g_day_no, 36524);
 
-    leap = 1;
-    if (g_day_no >= 36525) /* 36525 = 365*100 + 100/4 */
-    {
-        g_day_no--;
-        gy += 100 * div(g_day_no, 36524);
-        /* 36524 = 365*100 + 100/4 - 100/100 */
-        g_day_no = remainder(g_day_no, 36524);
+            if (g_day_no >= 365) {
+                g_day_no += 1;
+            } else {
+                leap = 0;
+            }
+        }
 
-        if (g_day_no >= 365)
-            g_day_no++;
-        else
+        gy += 4 * div(g_day_no, 1461);
+        /* 1461 = 365*4 + 4/4 */
+        g_day_no = remainder(g_day_no, 1461);
+
+        if (g_day_no >= 366) {
             leap = 0;
-    }
 
-    gy += 4 * div(g_day_no, 1461);
-    /* 1461 = 365*4 + 4/4 */
-    g_day_no = remainder(g_day_no, 1461);
+            g_day_no -= 1;
+            gy += div(g_day_no, 365);
+            g_day_no = remainder(g_day_no, 365);
+        }
 
-    if (g_day_no >= 366) {
-        leap = 0;
+        for (i = 0; g_day_no >= g_days_in_month[i] + (i === 1 && leap); i += 1) {
+            g_day_no -= g_days_in_month[i] + (i === 1 && leap);
+        }
+        gm = i + 1;
+        gd = g_day_no + 1;
 
-        g_day_no--;
-        gy += div(g_day_no, 365);
-        g_day_no = remainder(g_day_no, 365);
-    }
-
-    for (i = 0; g_day_no >= g_days_in_month[i] + (i == 1 && leap); i++)
-        g_day_no -= g_days_in_month[i] + (i == 1 && leap);
-    gm = i + 1;
-    gd = g_day_no + 1;
-
-    return new Array(gy, gm, gd);
-};
+        return [gy, gm, gd];
+    };
+}());

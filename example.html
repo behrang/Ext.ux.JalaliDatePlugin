@@ -1,33 +1,10 @@
-<!--
-  ~ Copyright (c) 2010 Tosan, Inc.
-  ~
-  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
-  ~ of this software and associated documentation files (the "Software"), to deal
-  ~ in the Software without restriction, including without limitation the rights
-  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  ~ copies of the Software, and to permit persons to whom the Software is
-  ~ furnished to do so, subject to the following conditions:
-  ~
-  ~ The above copyright notice and this permission notice shall be included in
-  ~ all copies or substantial portions of the Software.
-  ~
-  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  ~ THE SOFTWARE.
-  -->
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Jalali Date Example</title>
-    <link href="http://extjs.cachefly.net/ext-3.2.1/resources/css/ext-all.css" rel="stylesheet">
-    <script src="http://extjs.cachefly.net/ext-3.2.1/adapter/ext/ext-base.js"></script>
-    <script src="http://extjs.cachefly.net/ext-3.2.1/ext-all.js"></script>
+    <link href="http://cdn.sencha.io/ext-4.2.1-gpl/resources/css/ext-all.css" rel="stylesheet">
+    <script src="http://cdn.sencha.io/ext-4.2.1-gpl/ext-all.js"></script>
     <script src="Jalali.js"></script>
     <script src="JalaliDate.js"></script>
     <script src="JalaliDatePlugin.js"></script>
@@ -36,72 +13,75 @@
         /**
          * Example form for using Jalali date. Here we have 3 date components, DatePicker, DateField and DateMenu.
          * Each of them has Ext.ux.JalaliDatePlugin plugin.
-         *
-         * @author Behrang Noroozinia
          */
-        Ext.onReady(function() {
-            new Ext.FormPanel({
-                renderTo: document.body,
-                title: 'Jalali Date Example',
-                width: 300,
-                items: [
-                    {
-                        xtype: 'datepicker',
-                        plugins: [Ext.ux.JalaliDatePlugin],
-                        fieldLabel: 'Date Picker',
-                        minDate: new Date().clearTime(),
-                        maxDate: new Date().addJalali(Date.MONTH, 1).clearTime(),
-                        disabledDays: [4, 5],
-                        disabledDates: [
-                            new Date().addJalali(Date.DAY,5),
-                            new Date().addJalali(Date.DAY, 9),
-                            new Date().addJalali(Date.DAY, 13)
-                        ]
-                    },
-                    {
-                        xtype: 'datefield',
-                        plugins: [Ext.ux.JalaliDatePlugin],
-                        fieldLabel: 'Date Field',
-                        minValue: new Date().clearTime(),
-                        maxValue: new Date().addJalali(Date.MONTH, 1).clearTime(),
-                        disabledDays: [4, 5],
-                        disabledDates: [
-                            new Date().addJalali(Date.DAY,5),
-                            new Date().addJalali(Date.DAY, 9),
-                            new Date().addJalali(Date.DAY, 13)
-                        ]
-                    }
-                ],
-                bbar: {
+        (function () {
+            'use strict';
+
+            Ext.onReady(function() {
+                Ext.create('Ext.Panel', {
+                    renderTo: Ext.getBody(),
+                    title: 'Jalali Date Example',
+                    layout: 'form',
+                    width: 300,
                     items: [
                         {
-                            text: 'Date Menu',
-                            menu: {
-                                items: [
-                                    {
-                                        text: 'Choose a Date',
-                                        menu: {
-                                            xtype: 'datemenu',
-                                            plugins: [Ext.ux.JalaliDatePlugin],
-                                            hideOnClick: false,
-                                            minDate: new Date().clearTime(),
-                                            maxDate: new Date().addJalali(Date.MONTH, 1).clearTime(),
-                                            disabledDays: [4, 5],
-                                            disabledDates: [
-                                                new Date().addJalali(Date.DAY,5),
-                                                new Date().addJalali(Date.DAY, 9),
-                                                new Date().addJalali(Date.DAY, 13)
-                                            ]
-                                        }
-                                    }
-                                ]
-                            }
+                            xtype: 'datepicker',
+                            plugins: ['jalalidate'],
+                            fieldLabel: 'Date Picker',
+                            minDate: Ext.Date.clearTime(new Date()),
+                            maxDate: Ext.Date.clearTime(Ext.Date.addJalali(new Date(), Ext.Date.MONTH, 1)),
+                            disabledDays: [4, 5],
+                            disabledDates: [
+                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 5), 'Jalali'),
+                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 9), 'Jalali'),
+                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 13), 'Jalali')
+                            ]
+                        },
+                        {
+                            xtype: 'datefield',
+                            plugins: ['jalalidate'],
+                            useStrict: true,
+                            fieldLabel: 'Date Field',
+                            minValue: Ext.Date.clearTime(new Date()),
+                            maxValue: Ext.Date.clearTime(Ext.Date.addJalali(new Date(), Ext.Date.MONTH, 1)),
+                            disabledDays: [4, 5],
+                            disabledDates: [
+                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 5), 'Jalali'),
+                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 9), 'Jalali'),
+                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 13), 'Jalali')
+                            ]
                         }
-                    ]
-                }
+                    ],
+                    bbar: {
+                        items: [
+                            {
+                                text: 'Date Menu',
+                                menu: {
+                                    items: [
+                                        {
+                                            text: 'Choose a Date',
+                                            menu: {
+                                                xtype: 'datemenu',
+                                                plugins: ['jalalidate'],
+                                                hideOnClick: false,
+                                                minDate: Ext.Date.clearTime(new Date()),
+                                                maxDate: Ext.Date.clearTime(Ext.Date.addJalali(new Date(), Ext.Date.MONTH, 1)),
+                                                disabledDays: [4, 5],
+                                                disabledDates: [
+                                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 5), 'Jalali'),
+                                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 9), 'Jalali'),
+                                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 13), 'Jalali')
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                });
             });
-            Ext.QuickTips.init();
-        });
+        }());
     </script>
 </head>
 <body>
