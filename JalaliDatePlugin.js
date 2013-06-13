@@ -5,8 +5,6 @@
  * (e.g. Ext.DatePicker, Ext.menu.DateMenu or Ext.form.DateField) and it will be converted to Jalali.
  */
 (function () {
-    'use strict';
-
     var safeParse, createPicker, afterCreateMonthPicker, afterShowMonthPicker,
         onOkClick, showPrevMonth, showNextMonth, showPrevYear, showNextYear, update, fullUpdate;
 
