@@ -46,6 +46,7 @@
                 component.update = update;
                 component.fullUpdate = fullUpdate;
                 Ext.apply(component, this.statics().localization.DatePicker);
+                component.dayNames = component.dayNames.slice(component.startDay).concat(component.dayNames.slice(0, component.startDay));
             } else if (component instanceof Ext.form.field.Date) { // for Ext.form.field.Date
                 component.createPicker = createPicker;
                 component.safeParse = safeParse;
