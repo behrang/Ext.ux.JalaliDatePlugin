@@ -21,7 +21,8 @@
 (function () {
     'use strict';
 
-    Ext.apply(Ext.Date, {
+    Ext.define('Ext.ux.JalaliDate', {
+        override: 'Ext.Date',
 
         /**
          * Validates a Jalali date.
@@ -239,124 +240,124 @@
             'Bahman',
             'Esfand'
         ]
-    });
-
-    /**
-     * Jalali format codes. List of Jalali format codes:
-     * <pre><code>
-     Format  Description                                                          Example returned values
-     ------  -------------------------------------------------------------------  -----------------------
-       r     Jalali day of the month without leading zeros                        1 to 31
-       R     Jalali day of the month, 2 digits with leading zeros                 01 to 31
-       q     Numeric representation of Jalali month without leading zeros         1 to 12
-       Q     Numeric representation of Jalali month, 2 digits with leading zeros  01 to 12
-       e     Full textual representation of Jalali month                          Farvardin to Esfand
-       b     Short representation of Jalali year, 2 digits                        89 or 60
-       B     Full numeric representation of Jalali year, 4 digits                 1389 or 1360
-     * </code></pre>
-     * Example usage:
-     * <pre><code>
-     var d = new Date();
-     console.log(Ext.Date.format(d, 'B/Q/R'));     // 1389/06/14
-     console.log(Ext.Date.format(d, 'b/q/r'));     // 89/6/14
-     console.log(Ext.Date.format(d, 'l, r e B'));  // Sunday, 14 Shahrivar 1389
-     * </code></pre>
-     */
-    Ext.apply(Ext.Date.formatCodes, {
-        r: "Ext.Date.getJalaliDate(this)",
-        R: "Ext.String.leftPad(Ext.Date.getJalaliDate(this), 2, '0')",
-        q: "(Ext.Date.getJalaliMonth(this) + 1)",
-        Q: "Ext.String.leftPad(Ext.Date.getJalaliMonth(this) + 1, 2, '0')",
-        e: "Ext.Date.jalaliMonthNames[Ext.Date.getJalaliMonth(this)]",
-        b: "('' + Ext.Date.getJalaliFullYear(this)).substring(2, 4)",
-        B: "Ext.Date.getJalaliFullYear(this)"
-    });
-
-    Ext.apply(Ext.Date.formatFunctions, {
+    }, function () {
         /**
-         * Formats date instances using Jalali format (like: "1389/06/14").
-         * @return {String} Textual representation of Jalali date.
+         * Jalali format codes. List of Jalali format codes:
+         * <pre><code>
+         Format  Description                                                          Example returned values
+         ------  -------------------------------------------------------------------  -----------------------
+           r     Jalali day of the month without leading zeros                        1 to 31
+           R     Jalali day of the month, 2 digits with leading zeros                 01 to 31
+           q     Numeric representation of Jalali month without leading zeros         1 to 12
+           Q     Numeric representation of Jalali month, 2 digits with leading zeros  01 to 12
+           e     Full textual representation of Jalali month                          Farvardin to Esfand
+           b     Short representation of Jalali year, 2 digits                        89 or 60
+           B     Full numeric representation of Jalali year, 4 digits                 1389 or 1360
+         * </code></pre>
+         * Example usage:
+         * <pre><code>
+         var d = new Date();
+         console.log(Ext.Date.format(d, 'B/Q/R'));     // 1389/06/14
+         console.log(Ext.Date.format(d, 'b/q/r'));     // 89/6/14
+         console.log(Ext.Date.format(d, 'l, r e B'));  // Sunday, 14 Shahrivar 1389
+         * </code></pre>
          */
-        'Jalali': function () {
-            var jd = Ext.Date.convertToJalali(this);
-            return jd.jalaliYear + '/' +
-                    Ext.String.leftPad(jd.jalaliMonth + 1, 2, '0') + '/' +
-                    Ext.String.leftPad(jd.jalaliDate, 2, '0');
-        }
-    });
+        Ext.apply(Ext.Date.formatCodes, {
+            r: "Ext.Date.getJalaliDate(this)",
+            R: "Ext.String.leftPad(Ext.Date.getJalaliDate(this), 2, '0')",
+            q: "(Ext.Date.getJalaliMonth(this) + 1)",
+            Q: "Ext.String.leftPad(Ext.Date.getJalaliMonth(this) + 1, 2, '0')",
+            e: "Ext.Date.jalaliMonthNames[Ext.Date.getJalaliMonth(this)]",
+            b: "('' + Ext.Date.getJalaliFullYear(this)).substring(2, 4)",
+            B: "Ext.Date.getJalaliFullYear(this)"
+        });
 
-    Ext.apply(Ext.Date.parseFunctions, {
-        /**
-         * Parses a Jalali formatted date string (like "1389/06/09") and returns a Date object.
-         * @param {String} jalaliString Formatted string to parse.
-         * @param {Boolean} strict True to validate date strings after parsing which will return null when invalid
-         * (default is false).
-         * @return {Date} A Date object which is set to the Gregorian conversion of input.
-         */
-        'Jalali': Ext.Date.parseJalali,
-        'B/Q/R': Ext.Date.parseJalali,
-        'B/q/r': Ext.Date.parseJalali,
-        'b/q/r': function (value, strict) {
-            return Ext.Date.parseJalali('13' + value, strict);
-        },
-        'b/Q/R': function (value, strict) {
-            return Ext.Date.parseJalali('13' + value, strict);
-        },
-        'B': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(value + '/' + (Ext.Date.getJalaliMonth(now) + 1) + '/' + Ext.Date.getJalaliDate(now), strict);
-        },
-        'b': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali('13' + value + '/' + (Ext.Date.getJalaliMonth(now) + 1) + '/' + Ext.Date.getJalaliDate(now), strict);
-        },
-        'q': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value + '/' + Ext.Date.getJalaliDate(now), strict);
-        },
-        'Q': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value + '/' + Ext.Date.getJalaliDate(now), strict);
-        },
-        'r': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + (Ext.Date.getJalaliMonth(now) + 1) + '/' + value, strict);
-        },
-        'R': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + (Ext.Date.getJalaliMonth(now) + 1) + '/' + value, strict);
-        },
-        'b/q': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali('13' + value + '/' + Ext.Date.getJalaliDate(now), strict);
-        },
-        'B/q': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(value + '/' + Ext.Date.getJalaliDate(now), strict);
-        },
-        'B/Q': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(value + '/' + Ext.Date.getJalaliDate(now), strict);
-        },
-        'b/Q': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali('13' + value + '/' + Ext.Date.getJalaliDate(now), strict);
-        },
-        'q/r': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value, strict);
-        },
-        'Q/r': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value, strict);
-        },
-        'Q/R': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value, strict);
-        },
-        'q/R': function (value, strict) {
-            var now = new Date();
-            return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value, strict);
-        }
+        Ext.apply(Ext.Date.formatFunctions, {
+            /**
+             * Formats date instances using Jalali format (like: "1389/06/14").
+             * @return {String} Textual representation of Jalali date.
+             */
+            'Jalali': function () {
+                var jd = Ext.Date.convertToJalali(this);
+                return jd.jalaliYear + '/' +
+                        Ext.String.leftPad(jd.jalaliMonth + 1, 2, '0') + '/' +
+                        Ext.String.leftPad(jd.jalaliDate, 2, '0');
+            }
+        });
+
+        Ext.apply(Ext.Date.parseFunctions, {
+            /**
+             * Parses a Jalali formatted date string (like "1389/06/09") and returns a Date object.
+             * @param {String} jalaliString Formatted string to parse.
+             * @param {Boolean} strict True to validate date strings after parsing which will return null when invalid
+             * (default is false).
+             * @return {Date} A Date object which is set to the Gregorian conversion of input.
+             */
+            'Jalali': Ext.Date.parseJalali,
+            'B/Q/R': Ext.Date.parseJalali,
+            'B/q/r': Ext.Date.parseJalali,
+            'b/q/r': function (value, strict) {
+                return Ext.Date.parseJalali('13' + value, strict);
+            },
+            'b/Q/R': function (value, strict) {
+                return Ext.Date.parseJalali('13' + value, strict);
+            },
+            'B': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(value + '/' + (Ext.Date.getJalaliMonth(now) + 1) + '/' + Ext.Date.getJalaliDate(now), strict);
+            },
+            'b': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali('13' + value + '/' + (Ext.Date.getJalaliMonth(now) + 1) + '/' + Ext.Date.getJalaliDate(now), strict);
+            },
+            'q': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value + '/' + Ext.Date.getJalaliDate(now), strict);
+            },
+            'Q': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value + '/' + Ext.Date.getJalaliDate(now), strict);
+            },
+            'r': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + (Ext.Date.getJalaliMonth(now) + 1) + '/' + value, strict);
+            },
+            'R': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + (Ext.Date.getJalaliMonth(now) + 1) + '/' + value, strict);
+            },
+            'b/q': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali('13' + value + '/' + Ext.Date.getJalaliDate(now), strict);
+            },
+            'B/q': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(value + '/' + Ext.Date.getJalaliDate(now), strict);
+            },
+            'B/Q': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(value + '/' + Ext.Date.getJalaliDate(now), strict);
+            },
+            'b/Q': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali('13' + value + '/' + Ext.Date.getJalaliDate(now), strict);
+            },
+            'q/r': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value, strict);
+            },
+            'Q/r': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value, strict);
+            },
+            'Q/R': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value, strict);
+            },
+            'q/R': function (value, strict) {
+                var now = new Date();
+                return Ext.Date.parseJalali(Ext.Date.getJalaliFullYear(now) + '/' + value, strict);
+            }
+        });
     });
 }());

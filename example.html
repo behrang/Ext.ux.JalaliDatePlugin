@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <title>Jalali Date Example</title>
     <link href="http://cdn.sencha.com/ext/gpl/4.2.1/resources/css/ext-all.css" rel="stylesheet">
-    <script src="http://cdn.sencha.com/ext/gpl/4.2.1/ext-all.js"></script>
-    <script src="Jalali.js"></script>
-    <script src="JalaliDate.js"></script>
-    <script src="JalaliDatePlugin.js"></script>
-    <script src="JalaliDatePlugin-fa_IR.js"></script>
+    <script src="http://cdn.sencha.com/ext/gpl/4.2.1/ext-all-dev.js"></script>
     <script>
         /**
          * Example form for using Jalali date. Here we have 3 date components, DatePicker, DateField and DateMenu.
@@ -18,67 +14,75 @@
             'use strict';
 
             Ext.onReady(function() {
-                Ext.create('Ext.Panel', {
-                    renderTo: Ext.getBody(),
-                    title: 'Jalali Date Example',
-                    layout: 'form',
-                    width: 300,
-                    items: [
-                        {
-                            xtype: 'datepicker',
-                            plugins: ['jalalidate'],
-                            fieldLabel: 'Date Picker',
-                            minDate: Ext.Date.clearTime(new Date()),
-                            maxDate: Ext.Date.clearTime(Ext.Date.addJalali(new Date(), Ext.Date.MONTH, 1)),
-                            disabledDays: [4, 5],
-                            disabledDates: [
-                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 5), 'Jalali'),
-                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 9), 'Jalali'),
-                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 13), 'Jalali')
-                            ]
-                        },
-                        {
-                            xtype: 'datefield',
-                            plugins: ['jalalidate'],
-                            useStrict: true,
-                            fieldLabel: 'Date Field',
-                            minValue: Ext.Date.clearTime(new Date()),
-                            maxValue: Ext.Date.clearTime(Ext.Date.addJalali(new Date(), Ext.Date.MONTH, 1)),
-                            disabledDays: [4, 5],
-                            disabledDates: [
-                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 5), 'Jalali'),
-                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 9), 'Jalali'),
-                                Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 13), 'Jalali')
-                            ]
-                        }
-                    ],
-                    bbar: {
+                Ext.Loader.setPath('Ext.ux', '.');
+                Ext.require([
+                    'Ext.ux.Jalali',
+                    'Ext.ux.JalaliDate',
+                    'Ext.ux.JalaliDatePlugin',
+                    'Ext.ux.JalaliDatePlugin-fa_IR',
+                ], function () {
+                    Ext.create('Ext.Panel', {
+                        renderTo: Ext.getBody(),
+                        title: 'Jalali Date Example',
+                        layout: 'form',
+                        width: 300,
                         items: [
                             {
-                                text: 'Date Menu',
-                                menu: {
-                                    items: [
-                                        {
-                                            text: 'Choose a Date',
-                                            menu: {
-                                                xtype: 'datemenu',
-                                                plugins: ['jalalidate'],
-                                                hideOnClick: false,
-                                                minDate: Ext.Date.clearTime(new Date()),
-                                                maxDate: Ext.Date.clearTime(Ext.Date.addJalali(new Date(), Ext.Date.MONTH, 1)),
-                                                disabledDays: [4, 5],
-                                                disabledDates: [
-                                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 5), 'Jalali'),
-                                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 9), 'Jalali'),
-                                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 13), 'Jalali')
-                                                ]
-                                            }
-                                        }
-                                    ]
-                                }
+                                xtype: 'datepicker',
+                                plugins: ['jalalidate'],
+                                fieldLabel: 'Date Picker',
+                                minDate: Ext.Date.clearTime(new Date()),
+                                maxDate: Ext.Date.clearTime(Ext.Date.addJalali(new Date(), Ext.Date.MONTH, 1)),
+                                disabledDays: [4, 5],
+                                disabledDates: [
+                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 5), 'Jalali'),
+                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 9), 'Jalali'),
+                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 13), 'Jalali')
+                                ]
+                            },
+                            {
+                                xtype: 'datefield',
+                                plugins: ['jalalidate'],
+                                useStrict: true,
+                                fieldLabel: 'Date Field',
+                                minValue: Ext.Date.clearTime(new Date()),
+                                maxValue: Ext.Date.clearTime(Ext.Date.addJalali(new Date(), Ext.Date.MONTH, 1)),
+                                disabledDays: [4, 5],
+                                disabledDates: [
+                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 5), 'Jalali'),
+                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 9), 'Jalali'),
+                                    Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 13), 'Jalali')
+                                ]
                             }
-                        ]
-                    }
+                        ],
+                        bbar: {
+                            items: [
+                                {
+                                    text: 'Date Menu',
+                                    menu: {
+                                        items: [
+                                            {
+                                                text: 'Choose a Date',
+                                                menu: {
+                                                    xtype: 'datemenu',
+                                                    plugins: ['jalalidate'],
+                                                    hideOnClick: false,
+                                                    minDate: Ext.Date.clearTime(new Date()),
+                                                    maxDate: Ext.Date.clearTime(Ext.Date.addJalali(new Date(), Ext.Date.MONTH, 1)),
+                                                    disabledDays: [4, 5],
+                                                    disabledDates: [
+                                                        Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 5), 'Jalali'),
+                                                        Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 9), 'Jalali'),
+                                                        Ext.Date.format(Ext.Date.addJalali(new Date(), Ext.Date.DAY, 13), 'Jalali')
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    });
                 });
             });
         }());
