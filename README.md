@@ -44,3 +44,7 @@ License
 Jalali.js is licensed under the terms of the LGPL license.
 
 Other files are licensed under the terms of the MIT license.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/behrang/ext.ux.jalalidateplugin/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
