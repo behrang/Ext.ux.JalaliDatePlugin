@@ -47,10 +47,12 @@
                 component.fullUpdate = fullUpdate;
                 Ext.apply(component, this.statics().localization.DatePicker);
                 component.dayNames = component.dayNames.slice(component.startDay).concat(component.dayNames.slice(0, component.startDay));
+                component.setValue(component.value);
             } else if (component instanceof Ext.form.field.Date) { // for Ext.form.field.Date
                 component.createPicker = createPicker;
                 component.safeParse = safeParse;
                 Ext.apply(component, this.statics().localization.DateField);
+                component.setValue(component.value);
             }
         }
     });
