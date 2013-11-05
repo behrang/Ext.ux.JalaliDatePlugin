@@ -73,7 +73,7 @@
 
         parsedDate = Ext.Date.parseDate(value, format, strict);
         if (parsedDate) {
-            result = Ext.Date.clearTime(parsedDate);
+            result = Ext.Date.add(parsedDate, Ext.Date.HOUR, -12);
         }
         return result;
     };
